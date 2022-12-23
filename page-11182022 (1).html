@@ -1,0 +1,191 @@
+<html>
+
+<head>
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="crossorigin=""></script>
+
+<style>
+
+body {margin:0px;}
+html {scroll-behavior: smooth;}
+
+/* 找到 class 名稱為 nav 的標籤, 賦予樣式 */
+.nav {position:fixed; height:100%; width:400px; left:0;}
+
+/* 找到 class 名稱為 area 的標籤, 賦予樣式 */
+.area {position:relative; height:100%; opacity: 50%; margin-left: 400px}
+
+/* 找到 id 名稱為 sec1, sec2, sec3, sec5 的標籤, 賦予樣式 */
+#sec1 {background-color: lightgrey;}
+#sec2 {background-color: lightyellow;}
+#sec3 {background-color: lightblue;}
+#sec5 {background-color: lightpink;}
+
+/* 找到 nav 內的 ul 標籤, 賦予樣式 */
+.nav ul {position: absolute; list-style: none; top:30%;}
+
+/* 找到 nav 內的 li 標籤, 賦予樣式 */
+.nav li {margin-bottom: 20px}
+
+/* 針對 a 標籤的四種狀態, 賦予樣式 */
+a:link {}
+a:visited {}
+a:hover {color: #00FF00;}
+a:active {}
+
+/* 找到 id 名稱為 customers 的標籤, 賦予樣式 */
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 65%;
+  top:20%;
+  position:relative;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers tr:hover {background-color: #ddd;}
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+.area {overflow: auto;}
+#map {height: 100%}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- 左方導覽列 -->
+<div class="nav">
+    <ul>
+        <li><a href="#sec2"><h3>物資地圖</h3></a></li>
+        <li><a href="#sec3"><h3>物資表單</h3></a></li>
+        <li><a href="#sec4"><h3>物資列表</h3></a></li>
+        <li><a href="#sec5"><h3>作者介紹</h3></a></li>       
+        <li><a href="#sec1"><h3>回到介紹</h3></a></li>
+	</ul>
+</div>
+
+<!-- 專案介紹 -->
+<div id="sec1" class="area">
+    <h2>物資地圖-製作動機</h2>
+    <p>動機</p>
+    <h2>物資地圖-預期效益</h2>
+    <ul>
+        <li>效益 1</li>
+        <li>效益 2</li>
+    </ul>
+</div>
+
+<!-- 地圖 -->
+<div id="sec2" class="area">
+    <div id="map"></div>
+</div>
+
+<!-- 輸入表單 -->
+<div id="sec3" class="area">
+</div>
+
+<!-- 需求表格 -->
+<div id="sec4" class="area">
+    <table id="customers">
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Berglunds snabbköp</td>
+            <td>Christina Berglund</td>
+            <td>Sweden</td>
+        </tr>
+        <tr>
+            <td>Centro comercial Moctezuma</td>
+            <td>Francisco Chang</td>
+            <td>Mexico</td>
+        </tr>
+        <tr>
+            <td>Ernst Handel</td>
+            <td>Roland Mendel</td>
+            <td>Austria</td>
+        </tr>
+        <tr>
+            <td>Island Trading</td>
+            <td>Helen Bennett</td>
+            <td>UK</td>
+        </tr>
+        <tr>
+            <td>Königlich Essen</td>
+            <td>Philip Cramer</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Laughing Bacchus Winecellars</td>
+            <td>Yoshi Tannamuri</td>
+            <td>Canada</td>
+        </tr>
+        <tr>
+            <td>Magazzini Alimentari Riuniti</td>
+            <td>Giovanni Rovelli</td>
+            <td>Italy</td>
+        </tr>
+        <tr>
+            <td>North/South</td>
+            <td>Simon Crowther</td>
+            <td>UK</td>
+        </tr>
+        <tr>
+            <td>Paris spécialités</td>
+            <td>Marie Bertrand</td>
+            <td>France</td>
+        </tr>
+    </table>
+</div>
+
+<!-- 作者介紹頁面 -->
+<div id="sec5" class="area">
+    <h2>Author</h2>
+    <p>Introduction</p>
+</div>
+
+<!-- 以下為 JavaScript -->
+
+<script>
+
+//註解: 設定地圖位置 (經緯度) 與縮放比例, 並將地圖擺放至 id 名稱為 map 的網頁區塊 (div)
+var map = L.map('map').setView([22.760769, 121.153961], 15);
+
+//註解: 繪製地圖圖層
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+//註解: 增加一地圖標記
+var marker = L.marker([22.760769, 121.153961]).addTo(map);
+
+//註解: 地圖標記增加彈出資訊
+marker.bindPopup("<b>臺東女中</b><br><b>臺東最棒的高中!</b>")
+
+</script>
+
+</body>
+</html>
